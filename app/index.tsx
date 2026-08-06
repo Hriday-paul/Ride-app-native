@@ -33,7 +33,7 @@ export default function OnboardingScreen() {
 
         {/* CTA Button */}
         <TouchableOpacity
-          onPress={() => router.push('/(auth)/wellcome')}
+          onPress={() => router.push('/passanger/home')}
           activeOpacity={0.85}
           className="mt-9 w-full bg-blue-500 rounded-2xl py-5 items-center"
         >

@@ -4,7 +4,7 @@ import { RootState } from '../store';
 export const baseApi = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://192.168.0.103:3700/api', // 👈 your Express API URL
+    baseUrl: 'http://192.168.0.102:3700/api', // 👈 your Express API URL
     prepareHeaders: (headers, { getState }) => {
       // Attach JWT token to every request automatically
       const token = (getState() as RootState).auth.token;

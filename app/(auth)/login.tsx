@@ -50,14 +50,15 @@ export default function LoginScreen() {
   const onSubmit = async (data: FormData) => {
     try {
       const payload = { phone: "+" + selectedCountry?.dial + data?.phone, password: data?.password };
-      await handleLogin(payload).unwrap();
+      // await handleLogin(payload).unwrap();
+      router.push('/passanger/home')
     } catch (err: any) {
 
       if (err?.status !== 400) {
         return;
       }
 
-      const serverErrors = err?.data?.errors as { field: string; msg: string }[];
+      const serverErrors = err?.data?.errors as { field: string; msg: string }[] ?? [];
       if (serverErrors.length) {
         serverErrors.forEach(({ field, msg }) => {
           if (field === 'phone' || field === 'password') {
