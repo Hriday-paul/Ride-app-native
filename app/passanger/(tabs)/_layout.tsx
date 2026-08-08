@@ -3,24 +3,28 @@ import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import React from "react";
 import { View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const ACTIVE_COLOR = colors.primary;
 const INACTIVE_COLOR = colors.gray;
 
 export default function TabLayout() {
+  const insets = useSafeAreaInsets();
+
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: false,
         tabBarStyle: {
-          // position: "absolute",
-          // bottom: 0,
-          // left: 0,
-          // right: 0,
-          height: 70,
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          right: 0,
+          height: 70 + insets.bottom,
           paddingTop: 12,
-          paddingBottom: 0,
+          // Push content above the system nav bar / home indicator
+          paddingBottom: insets.bottom,
           elevation: 12,
           backgroundColor: "white",
           borderTopWidth: 0,
@@ -32,33 +36,6 @@ export default function TabLayout() {
           shadowRadius: 12,
           shadowOffset: { width: 0, height: -4 },
         },
-        // tabBarButton: ({ children, onPress, accessibilityState, testID, accessibilityLabel }) => {
-        //   return (
-        //     <Pressable
-        //       onPress={onPress}
-        //       accessibilityState={accessibilityState}
-        //       testID={testID}
-        //       accessibilityLabel={accessibilityLabel}
-        //       // hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-        //       android_ripple={{ color: "#E5E7EB", borderless: false, radius: 42 }}
-        //       style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
-        //     >
-        //       {({ pressed }) => (
-        //         <View
-        //           style={{
-        //             // paddingHorizontal: 18,
-        //             // paddingVertical: 8,
-        //             // borderRadius: 18,
-        //             backgroundColor: pressed ? "#f9f9f9" : "transparent",
-        //           }}
-        //           className="flex-1 items-center justify-center w-full"
-        //         >
-        //           {children}
-        //         </View>
-        //       )}
-        //     </Pressable>
-        //   );
-        // },
       }}
     >
       <Tabs.Screen

@@ -155,14 +155,14 @@ function RideHistoryCard({ history }: { history: IReservation }) {
     const {
         createdAt,
         distance,
-        driver,
+        code,
         pick_up,
         drop_off,
         final_price,
     } = history;
 
 
-    const vehicleNumber = driver?.car?.license_number ?? "—";
+    
 
     return (
         <View
@@ -171,7 +171,7 @@ function RideHistoryCard({ history }: { history: IReservation }) {
                 borderWidth: 1,
                 borderColor: "#E5E7EB",
                 borderRadius: 16,
-                padding: 16,
+                padding: 12,
             }}
         >
             {/* Top row: icon + date/distance + vehicle, badge on right */}
@@ -183,9 +183,9 @@ function RideHistoryCard({ history }: { history: IReservation }) {
 
                     <View className="flex-1">
                         <Text className="text-gray-900 font-semibold text-[15px]">
-                            {formatDate(createdAt)}, {distance}km
+                            {formatDate(createdAt)}, {distance.toFixed(1)} km
                         </Text>
-                        <Text className="text-gray-400 text-sm mt-0.5">{vehicleNumber}</Text>
+                        <Text className="text-gray-500 text-sm font-medium mt-0.5">{code}</Text>
                     </View>
                 </View>
 
@@ -198,13 +198,13 @@ function RideHistoryCard({ history }: { history: IReservation }) {
                     }}
                 >
                     <Text style={{ color: "#FFFFFF", fontSize: 12, fontWeight: "700" }}>
-                        {final_price}
+                        ${final_price.toFixed(2)}
                     </Text>
                 </View>
             </View>
 
             {/* Timeline: pickup + drop */}
-            <View className="mt-4 pl-1">
+            <View className="mt-3 pl-1">
                 {/* Pickup */}
                 {pick_up && (
                     <View className="flex-row">

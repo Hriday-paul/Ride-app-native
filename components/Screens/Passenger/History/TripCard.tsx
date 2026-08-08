@@ -24,14 +24,14 @@ function TripCard({ trip }: { trip: IReservation }) {
     const {
         createdAt,
         distance,
-        driver,
+        code,
         status,
         pick_up,
         drop_off,
     } = trip;
 
     const statusStyle = STATUS_STYLES[status];
-    const vehicleNumber = driver?.car?.license_number ?? "—";
+    
 
     return (
         <View
@@ -52,9 +52,9 @@ function TripCard({ trip }: { trip: IReservation }) {
 
                     <View className="flex-1">
                         <Text className="text-gray-900 font-semibold text-[15px]">
-                            {formatDate(createdAt)}, {distance}km
+                            {formatDate(createdAt)}, {distance.toFixed(2)} km
                         </Text>
-                        <Text className="text-gray-400 text-sm mt-0.5">{vehicleNumber}</Text>
+                        <Text className="text-gray-500 font-medium text-sm mt-0.5">{code}</Text>
                     </View>
                 </View>
 
@@ -73,7 +73,7 @@ function TripCard({ trip }: { trip: IReservation }) {
             </View>
 
             {/* Timeline: pickup + drop */}
-            <View className="mt-4 pl-1">
+            <View className="mt-3 pl-1">
                 {/* Pickup */}
                 {pick_up && (
                     <View className="flex-row">
