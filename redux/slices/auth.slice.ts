@@ -1,17 +1,22 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 type AuthState = {
-  token: string | null;
+  authToken: string | null;
+  accessToken: string | null;
+  refreshToken: string | null;
   user: {
-    id: string;
     name: string;
+    email: string | null;
     phone: string;
-    role: 'rider' | 'driver';
+    image: string | null;
+    role: "Driver" | "User"
   } | null;
 };
 
 const initialState: AuthState = {
-  token: null,
+  authToken: null,
+  accessToken: null,
+  refreshToken: null,
   user: null,
 };
 
@@ -19,16 +24,24 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setCredentials: (state, action: PayloadAction<{ token: string; user: AuthState['user'] }>) => {
-      state.token = action.payload.token;
+    setCredentials: (state, action: PayloadAction<{ accessToken: string; refreshToken: string; user: AuthState['user'] }>) => {
+      state.authToken = null;
+      state.accessToken = action.payload.accessToken;
+      state.refreshToken = action.payload.refreshToken;
       state.user = action.payload.user;
     },
+    setTokens: (state, action: PayloadAction<{ accessToken: string; refreshToken: string }>) => {
+      state.accessToken = action.payload.accessToken;
+      state.refreshToken = action.payload.refreshToken;
+    },
     logout: (state) => {
-      state.token = null;
+      state.authToken = null;
+      state.accessToken = null;
+      state.refreshToken = null;
       state.user = null;
     },
   },
 });
 
-export const { setCredentials, logout } = authSlice.actions;
+export const { setCredentials, logout, setTokens } = authSlice.actions;
 export default authSlice.reducer;

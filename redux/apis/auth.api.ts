@@ -1,3 +1,4 @@
+import { IUser } from "../types";
 import { baseApi } from "./base.api";
 
 type LoginRequest = {
@@ -6,19 +7,15 @@ type LoginRequest = {
 };
 
 type LoginResponse = {
-  token: string;
-  user: {
-    id: string;
-    name: string;
-    phone: string;
-    role: 'rider' | 'driver';
-  };
+  accessToken: string;
+  refreshToken: string;
+  user: IUser;
 };
 
 export const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
 
-    login: builder.mutation<LoginResponse, LoginRequest>({
+    login: builder.mutation<{message: string, data: LoginResponse}, LoginRequest>({
       query: (body) => ({
         url: '/auth/login',
         method: 'POST',

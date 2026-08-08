@@ -1,7 +1,9 @@
+import { RootState } from "@/redux/store";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React from "react";
 import { Image, Pressable, Text, View } from "react-native";
+import { useSelector } from "react-redux";
 
 export default function HomeHeader({
 
@@ -9,13 +11,15 @@ export default function HomeHeader({
     const router = useRouter();
     const notificationCount = 7;
 
+    const user = useSelector((state: RootState) => state.auth.user);
+
     return (
         <View className="flex-row items-center justify-between py-4">
             {/* Left: avatar + greeting */}
             <View className="flex-row items-center">
                 <View >
                     <Image
-                        source={require('@/assets/images/empty-user.png')}
+                        source={user?.image ? { uri: user.image } : require('@/assets/images/empty-user.png')}
                         className="w-12 h-12 rounded-full border-2 border-white"
                         resizeMode="cover"
                     />
@@ -24,7 +28,7 @@ export default function HomeHeader({
                 <View className="ml-3">
                     <Text className="text-gray-400 text-sm font-medium font-poppins">Good Morning</Text>
                     <Text className="text-gray-900 text-base font-bold font-poppins">
-                        Hriday
+                        {user?.name || 'Unknown'}
                     </Text>
                 </View>
             </View>

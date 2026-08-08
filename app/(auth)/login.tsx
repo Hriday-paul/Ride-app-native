@@ -1,6 +1,7 @@
 // app/(auth)/login.tsx
 import CountryCodePicker, { COUNTRY_CODES } from '@/components/ui/CountryCodePicker';
 import { useLoginMutation } from '@/redux/apis/auth.api';
+import { setCredentials } from '@/redux/slices/auth.slice';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useRouter } from 'expo-router';
@@ -17,6 +18,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { useDispatch } from 'react-redux';
 
 type FormData = {
   phone: string;
@@ -34,6 +36,8 @@ export default function LoginScreen() {
 
   const [showPassword, setShowPassword] = useState(false);
 
+  const dispatch = useDispatch();
+
   const {
     control,
     handleSubmit,
@@ -50,7 +54,19 @@ export default function LoginScreen() {
   const onSubmit = async (data: FormData) => {
     try {
       const payload = { phone: "+" + selectedCountry?.dial + data?.phone, password: data?.password };
-      // await handleLogin(payload).unwrap();
+      const response = await handleLogin(payload).unwrap();
+      const res = response?.data;
+      dispatch(setCredentials({
+        user: {
+          name: res.user.name,
+          email: res.user.email,
+          phone: res.user.phone,
+          image: res.user?.picture?.url ?? null,
+          role: res.user.role
+        },
+        accessToken: res.accessToken,
+        refreshToken: res.refreshToken
+      }));
       router.push('/passanger/home')
     } catch (err: any) {
 
@@ -196,8 +212,8 @@ export default function LoginScreen() {
               >
                 <View
                   className={`w-5 h-5 rounded border-2 items-center justify-center ${value
-                      ? 'bg-primary border-primary'
-                      : 'border-gray-300 bg-white'
+                    ? 'bg-primary border-primary'
+                    : 'border-gray-300 bg-white'
                     }`}
                 >
                   {value && (

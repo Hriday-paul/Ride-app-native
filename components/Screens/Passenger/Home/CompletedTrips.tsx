@@ -1,7 +1,11 @@
+import ErrorState from '@/components/Shared/Error';
+import { usePassengerCompletedTripsQuery } from '@/redux/apis/reservation.api';
+import { IReservation } from '@/redux/types';
 import { colors } from '@/utils/colors';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { FlatList, Text, View } from 'react-native';
+import RideHistoryCardSkeleton from './TripLoading';
 
 type RideStatus = "completed" | "cancelled";
 
@@ -90,16 +94,52 @@ export const rideHistoryData: RideHistoryCardProps[] = [
 ];
 
 const CompletedTrips = () => {
+    const { isLoading, isError, isSuccess, data, refetch, error, isFetching } = usePassengerCompletedTripsQuery();
+
+    if (isLoading) {
+        <View>
+            {Array.from({ length: 3 }).map((_, i) => (
+                <View key={i} style={{ marginBottom: 10 }}>
+                    <RideHistoryCardSkeleton />
+                </View>
+            ))}
+        </View>
+    }
+
+    if (isError) {
+        const err = error as any;
+        return (
+            <ErrorState onRetry={refetch} message={err?.data?.message || 'An unexpected error occurred.'} />
+        )
+    }
+
     return (
         <View className='mt-5'>
-            <Text className='text-xl font-bold font-poppins mb-5'>Your Last Trip</Text>
+            <Text className='text-xl font-semibold font-poppins-semibold mb-5'>Your Last Trips</Text>
             <FlatList
-                data={rideHistoryData}
+                data={data?.data || []}
                 renderItem={({ item }) => <RideHistoryCard history={item} />}
-                keyExtractor={item => item.id}
+                keyExtractor={item => item.id.toString()}
                 ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{ paddingBottom: 160 }}
+
+                refreshing={isFetching}
+                onRefresh={refetch}
+
+                ListEmptyComponent={
+                    <View className="items-center justify-center py-16 px-6">
+                        <View className="bg-gray-100 rounded-full h-16 w-16 items-center justify-center mb-4">
+                            <Ionicons name="car-outline" size={28} color="#9CA3AF" />
+                        </View>
+                        <Text className="text-gray-900 font-semibold text-base mb-1">
+                            No trips yet
+                        </Text>
+                        <Text className="text-gray-400 text-sm text-center">
+                            Your completed rides will show up here.
+                        </Text>
+                    </View>
+                }
             />
         </View>
     )
@@ -107,117 +147,90 @@ const CompletedTrips = () => {
 
 export default CompletedTrips;
 
+function formatDate(date: Date | string) {
+    return new Date(date).toLocaleDateString("en-US", { month: "short", day: "2-digit" });
+}
 
-const STATUS_STYLES: Record<RideStatus, { bg: string; text: string; label: string }> = {
-    completed: { bg: "#DCFCE7", text: "#16A34A", label: "Completed" },
-    cancelled: { bg: "#DC2626", text: "#FFFFFF", label: "Cancelled" },
-};
+function RideHistoryCard({ history }: { history: IReservation }) {
+    const {
+        createdAt,
+        distance,
+        driver,
+        pick_up,
+        drop_off,
+        final_price,
+    } = history;
 
-function RideHistoryCard({ history }: { history: RideHistoryCardProps }) {
-    const { date, distanceKm, durationMin, vehicleNumber, status, pickup, drop } = history;
-    const statusStyle = STATUS_STYLES[status];
+
+    const vehicleNumber = driver?.car?.license_number ?? "—";
 
     return (
         <View
             style={{
                 backgroundColor: "white",
-                borderWidth : 1,
+                borderWidth: 1,
                 borderColor: "#E5E7EB",
                 borderRadius: 16,
                 padding: 16,
             }}
         >
-            {/* Top row: icon + date/distance/duration + vehicle, badge on right */}
+            {/* Top row: icon + date/distance + vehicle, badge on right */}
             <View className="flex-row items-start justify-between">
                 <View className="flex-row items-start flex-1">
-                    <View
-                        className='bg-primary/15 rounded-full h-10 w-10 items-center justify-center mr-2.5'
-                    >
+                    <View className='bg-primary/15 rounded-full h-10 w-10 items-center justify-center mr-2.5'>
                         <Ionicons name="car-sport" size={18} color={colors.primary} />
                     </View>
 
                     <View className="flex-1">
                         <Text className="text-gray-900 font-semibold text-[15px]">
-                            {date}, {distanceKm}km, {durationMin} min
+                            {formatDate(createdAt)}, {distance}km
                         </Text>
                         <Text className="text-gray-400 text-sm mt-0.5">{vehicleNumber}</Text>
                     </View>
                 </View>
 
-                {status === "cancelled" ? (
-                    <View
-                        style={{
-                            backgroundColor: statusStyle.bg,
-                            paddingHorizontal: 12,
-                            paddingVertical: 5,
-                            borderRadius: 8,
-                        }}
-                    >
-                        <Text style={{ color: statusStyle.text, fontSize: 12, fontWeight: "700" }}>
-                            {statusStyle.label}
-                        </Text>
-                    </View>
-                ) : (
-                    <View
-                        style={{
-                            backgroundColor: statusStyle.bg,
-                            paddingHorizontal: 12,
-                            paddingVertical: 5,
-                            borderRadius: 8,
-                        }}
-                    >
-                        <Text style={{ color: statusStyle.text, fontSize: 12, fontWeight: "700" }}>
-                            {statusStyle.label}
-                        </Text>
-                    </View>
-                )}
+                <View
+                    style={{
+                        backgroundColor: "#000000",
+                        paddingHorizontal: 12,
+                        paddingVertical: 5,
+                        borderRadius: 8,
+                    }}
+                >
+                    <Text style={{ color: "#FFFFFF", fontSize: 12, fontWeight: "700" }}>
+                        {final_price}
+                    </Text>
+                </View>
             </View>
 
             {/* Timeline: pickup + drop */}
             <View className="mt-4 pl-1">
                 {/* Pickup */}
-                <View className="flex-row">
-                    <View className="items-center mr-3" style={{ width: 10 }}>
-                        <View
-                            style={{
-                                width: 8,
-                                height: 8,
-                                borderRadius: 4,
-                                backgroundColor: "#10B981",
-                            }}
-                        />
-                        <View
-                            style={{
-                                width: 1,
-                                flex: 1,
-                                backgroundColor: "#D1D5DB",
-                                marginTop: 4,
-                            }}
-                        />
+                {pick_up && (
+                    <View className="flex-row">
+                        <View className="items-center mr-3" style={{ width: 10 }}>
+                            <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: "#10B981" }} />
+                            <View style={{ width: 1, flex: 1, backgroundColor: "#D1D5DB", marginTop: 4 }} />
+                        </View>
+                        <View className="flex-1 pb-4">
+                            <Text className="text-gray-400 text-xs">{pick_up.time ?? "—"}</Text>
+                            <Text className="text-gray-800 text-sm mt-0.5">{pick_up.address}</Text>
+                        </View>
                     </View>
-                    <View className="flex-1 pb-4">
-                        <Text className="text-gray-400 text-xs">{pickup.time}</Text>
-                        <Text className="text-gray-800 text-sm mt-0.5">{pickup.address}</Text>
-                    </View>
-                </View>
+                )}
 
                 {/* Drop */}
-                <View className="flex-row">
-                    <View className="items-center mr-3" style={{ width: 10 }}>
-                        <View
-                            style={{
-                                width: 8,
-                                height: 8,
-                                borderRadius: 4,
-                                backgroundColor: "#EF4444",
-                            }}
-                        />
+                {drop_off && (
+                    <View className="flex-row">
+                        <View className="items-center mr-3" style={{ width: 10 }}>
+                            <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: "#EF4444" }} />
+                        </View>
+                        <View className="flex-1">
+                            <Text className="text-gray-400 text-xs">{drop_off.time ?? "—"}</Text>
+                            <Text className="text-gray-800 text-sm mt-0.5">{drop_off.address}</Text>
+                        </View>
                     </View>
-                    <View className="flex-1">
-                        <Text className="text-gray-400 text-xs">{drop.time}</Text>
-                        <Text className="text-gray-800 text-sm mt-0.5">{drop.address}</Text>
-                    </View>
-                </View>
+                )}
             </View>
         </View>
     );

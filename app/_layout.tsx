@@ -10,6 +10,7 @@ import "../global.css";
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { store } from '@/redux/store';
 import { useEffect } from 'react';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -32,9 +33,11 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Provider store={store}>
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="index" options={{ headerShown: false }} />
-      </Stack>
+        <SafeAreaProvider>
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="index" options={{ headerShown: false }} />
+          </Stack>
+        </SafeAreaProvider>
       </Provider>
       <StatusBar style="auto" />
     </ThemeProvider>

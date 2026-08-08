@@ -1,9 +1,21 @@
 // app/index.tsx
+import { RootState } from '@/redux/store';
 import { useRouter } from 'expo-router';
 import { Image, StatusBar, Text, TouchableOpacity, View } from 'react-native';
+import { useSelector } from 'react-redux';
 
 export default function OnboardingScreen() {
   const router = useRouter();
+
+  const user = useSelector((state: RootState) => state.auth.user);
+
+  const handleGetStarted = () => {
+    if (user) {
+      router.push('/passanger/home');
+    } else {
+      router.push('/(auth)/login');
+    }
+  };
 
   return (
     <View className="flex-1 ">
@@ -33,7 +45,7 @@ export default function OnboardingScreen() {
 
         {/* CTA Button */}
         <TouchableOpacity
-          onPress={() => router.push('/passanger/home')}
+          onPress={handleGetStarted}
           activeOpacity={0.85}
           className="mt-9 w-full bg-blue-500 rounded-2xl py-5 items-center"
         >

@@ -18,7 +18,7 @@ export default function TabLayout() {
           // bottom: 0,
           // left: 0,
           // right: 0,
-          height: 60,
+          height: 70,
           paddingTop: 12,
           paddingBottom: 0,
           elevation: 12,
@@ -32,10 +32,37 @@ export default function TabLayout() {
           shadowRadius: 12,
           shadowOffset: { width: 0, height: -4 },
         },
+        // tabBarButton: ({ children, onPress, accessibilityState, testID, accessibilityLabel }) => {
+        //   return (
+        //     <Pressable
+        //       onPress={onPress}
+        //       accessibilityState={accessibilityState}
+        //       testID={testID}
+        //       accessibilityLabel={accessibilityLabel}
+        //       // hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+        //       android_ripple={{ color: "#E5E7EB", borderless: false, radius: 42 }}
+        //       style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+        //     >
+        //       {({ pressed }) => (
+        //         <View
+        //           style={{
+        //             // paddingHorizontal: 18,
+        //             // paddingVertical: 8,
+        //             // borderRadius: 18,
+        //             backgroundColor: pressed ? "#f9f9f9" : "transparent",
+        //           }}
+        //           className="flex-1 items-center justify-center w-full"
+        //         >
+        //           {children}
+        //         </View>
+        //       )}
+        //     </Pressable>
+        //   );
+        // },
       }}
     >
       <Tabs.Screen
-        name="passanger/home"
+        name="home"
         options={{
           title: "Home",
           tabBarIcon: ({ focused }) => (
@@ -54,7 +81,7 @@ export default function TabLayout() {
       />
 
       <Tabs.Screen
-        name="passanger/history"
+        name="history"
         options={{
           title: "History",
           tabBarIcon: ({ focused }) => (
@@ -73,7 +100,7 @@ export default function TabLayout() {
       />
 
       <Tabs.Screen
-        name="passanger/chat"
+        name="chat"
         options={{
           title: "Chat",
           tabBarIcon: ({ focused }) => (
@@ -92,7 +119,7 @@ export default function TabLayout() {
       />
 
       <Tabs.Screen
-        name="passanger/profile"
+        name="profile"
         options={{
           title: "Profile",
           tabBarIcon: ({ focused }) => (
