@@ -10,25 +10,6 @@ export default function PassangerHome() {
   return (
     <SafeAreaView className="flex-1 bg-white px-4 py-2">
       <StatusBar barStyle="dark-content" />
-<<<<<<< HEAD
-      <View className="flex-1">
-        
-        <HomeHeader />
-        
-        <View>
-          <TouchableOpacity
-            onPress={() => router.push('/passanger/makeTrip')}
-            activeOpacity={0.85}
-            className="w-full bg-primary rounded-full py-4 items-center my-2"
-          >
-            <Text className="text-white text-lg font-bolds font-poppins">
-              Make Reservation
-            </Text>
-          </TouchableOpacity>
-        </View>
-
-        <CompletedTrips />
-=======
       <HomeHeader />
       <View>
         <TouchableOpacity
@@ -40,7 +21,6 @@ export default function PassangerHome() {
             Make Reservation
           </Text>
         </TouchableOpacity>
->>>>>>> 957f890 (handled select contact)
       </View>
     </SafeAreaView>
   )
