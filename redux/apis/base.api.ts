@@ -3,7 +3,11 @@ import { logout, setTokens } from '../slices/auth.slice';
 import { RootState } from '../store';
 
 const baseQuery = fetchBaseQuery({
+<<<<<<< HEAD
   baseUrl: 'http://10.10.28.6:3700/api', // 👈 your Express API URL
+=======
+  baseUrl: 'http://192.168.0.106:3700/api', // 👈 your Express API URL
+>>>>>>> 957f890 (handled select contact)
   prepareHeaders: (headers, { getState }) => {
     // Attach JWT token to every request automatically
     const auth = (getState() as RootState).auth;

@@ -6,13 +6,15 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 
 const MakeTrip = () => {
     return (
-        <SafeAreaView className="flex-1 bg-white px-4 py-2">
+        <SafeAreaView className="flex-1 bg-white">
 
             <StatusBar barStyle="dark-content" className='bg-white' />
 
             <View className="flex-1">
 
-                <Appbar title="Make Reservation" />
+                <View className='px-4 py-2'>
+                    <Appbar title="Make Reservation" />
+                </View>
 
                 <AddReservationForm />
 
