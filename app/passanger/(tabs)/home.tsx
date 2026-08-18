@@ -1,4 +1,3 @@
-import CompletedTrips from '@/components/Screens/Passenger/Home/CompletedTrips'
 import HomeHeader from '@/components/Screens/Passenger/Home/HomeHeader'
 import { useRouter } from 'expo-router'
 import React from 'react'
@@ -13,7 +12,7 @@ export default function PassangerHome() {
       <HomeHeader />
       <View>
         <TouchableOpacity
-          onPress={() => router.push('/passanger/selectContact')}
+          onPress={() => router.push('/passanger/makeTrip')}
           activeOpacity={0.85}
           className="w-full bg-primary rounded-full py-4 items-center my-2"
         >

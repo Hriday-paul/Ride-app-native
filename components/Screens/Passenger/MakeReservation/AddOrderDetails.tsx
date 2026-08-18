@@ -1,11 +1,16 @@
-import React, { useState } from "react";
+import { ReservationContext } from "@/contexts/ReservationContext";
+import { useRouter } from "expo-router";
+import React, { useContext, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 
 type BookingFor = "me" | "other";
 type TripType = "oneway" | "roundtrip" | "hourly";
 
 function AddOrderDetails() {
-  const [bookingFor, setBookingFor] = useState<BookingFor>("me");
+
+  const context = useContext(ReservationContext);
+
+  const router = useRouter()
   const [tripType, setTripType] = useState<TripType>("oneway");
 
   return (
@@ -18,30 +23,26 @@ function AddOrderDetails() {
 
         <View className="flex-row bg-gray-100 rounded-full p-1">
           <Pressable
-            onPress={() => setBookingFor("me")}
-            className={`flex-1 py-3 rounded-full items-center ${
-              bookingFor === "me" ? "bg-blue-500" : "bg-transparent"
-            }`}
+            // onPress={() => setBookingFor("me")}
+            className={`flex-1 py-3 rounded-full items-center ${!context?.bookingContact ? "bg-blue-500" : "bg-transparent"
+              }`}
           >
             <Text
-              className={`font-semibold text-base font-poppins-semibold ${
-                bookingFor === "me" ? "text-white" : "text-gray-500"
-              }`}
+              className={`font-semibold text-base font-poppins-semibold ${!context?.bookingContact ? "text-white" : "text-gray-500"
+                }`}
             >
               Me
             </Text>
           </Pressable>
 
           <Pressable
-            onPress={() => setBookingFor("other")}
-            className={`flex-1 py-3 rounded-full items-center ${
-              bookingFor === "other" ? "bg-blue-500" : "bg-transparent"
-            }`}
+            onPress={() => router.push('/passanger/selectContact')}
+            className={`flex-1 py-3 rounded-full items-center ${context?.bookingContact ? "bg-blue-500" : "bg-transparent"
+              }`}
           >
             <Text
-              className={`font-semibold ${
-                bookingFor === "other" ? "text-white" : "text-gray-500"
-              }`}
+              className={`font-semibold text-base font-poppins-semibold ${context?.bookingContact ? "text-white" : "text-gray-500"
+                }`}
             >
               Other
             </Text>
@@ -66,14 +67,12 @@ function AddOrderDetails() {
             <Pressable
               key={item.key}
               onPress={() => setTripType(item.key)}
-              className={`flex-1 py-3 rounded-md items-center ${
-                tripType === item.key ? "bg-blue-500" : "bg-gray-100"
-              }`}
+              className={`flex-1 py-3 rounded-md items-center ${tripType === item.key ? "bg-blue-500" : "bg-gray-100"
+                }`}
             >
               <Text
-                className={`font-medium font-poppins-semibold text-sm ${
-                  tripType === item.key ? "text-white" : "text-gray-500"
-                }`}
+                className={`font-medium font-poppins-semibold text-sm ${tripType === item.key ? "text-white" : "text-gray-500"
+                  }`}
               >
                 {item.label}
               </Text>

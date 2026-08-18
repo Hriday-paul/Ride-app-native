@@ -4,12 +4,12 @@ import { Stack } from 'expo-router';
 export default function ReservationLayout() {
   return (
     <ReservationProvider>
-      <Stack screenOptions={{ headerShown: false, animation : "slide_from_right" }}>
+      <Stack screenOptions={{ headerShown: false, }}>
         <Stack.Screen
           name="makeTrip"
           options={{
             title: "Make Reservation",
-            animation : "slide_from_right"
+            // animation: "slide_from_right"
           }}
         />
 
@@ -17,7 +17,14 @@ export default function ReservationLayout() {
           name="selectContact"
           options={{
             title: "Select Contact",
-            animation : "slide_from_right"
+            animation: "slide_from_right"
+          }}
+        />
+        <Stack.Screen
+          name="addNewContact"
+          options={{
+            title: "Add New Contact",
+            animation: "slide_from_right"
           }}
         />
 
